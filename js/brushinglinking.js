@@ -15,13 +15,25 @@ let brush1;
 let myCircles1; 
 
 //TODO: append svg object to the body of the page to house Scatterplot2 (call it svg2)
-
+const svg2 = d3.select("#vis-holder")
+                .append("svg")
+                .attr("width", )
+                .attr("height", )
+                .attr("viewBox", );
 //TODO: Initialize brush for Scatterplot2 and points. We will need these to be global.
+let brush2; 
+let myCircles2;
+
 
 //TODO: append svg object to the body of the page to house bar chart 
+const svg3 = d3.select("#vis-holder")
+                .append("svg")
+                .attr("width", )
+                .attr("height", )
+                .attr("viewBox", );
 
 //TODO: Initialize bars. We will need these to be global. 
-
+let bars;
 
 // Define color scale
 const color = d3.scaleOrdinal()
