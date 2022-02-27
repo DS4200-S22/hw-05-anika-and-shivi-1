@@ -18,8 +18,9 @@ let myCircles1;
 const svg2 = d3.select("#vis-holder")
                 .append("svg")
                 .attr("width", )
-                .attr("height", )
+                .attr("height", height - margin.top - margin.bottom) //height the same as above so they are next to eachother 
                 .attr("viewBox", );
+
 //TODO: Initialize brush for Scatterplot2 and points. We will need these to be global.
 let brush2; 
 let myCircles2;
@@ -29,11 +30,11 @@ let myCircles2;
 const svg3 = d3.select("#vis-holder")
                 .append("svg")
                 .attr("width", )
-                .attr("height", )
+                .attr("height", height - margin.top - margin.bottom) //height the same as above so they are next to eachother 
                 .attr("viewBox", );
 
 //TODO: Initialize bars. We will need these to be global. 
-let bars;
+let bars
 
 // Define color scale
 const color = d3.scaleOrdinal()
