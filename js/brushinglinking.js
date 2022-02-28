@@ -17,7 +17,7 @@ let myCircles1;
 //TODO: append svg object to the body of the page to house Scatterplot2 (call it svg2)
 const svg2 = d3.select("#vis-holder")
                 .append("svg")
-                .attr("width", )
+                .attr("width", width - margin.left - margin.right)
                 .attr("height", height - margin.top - margin.bottom) //height the same as above so they are next to eachother 
                 .attr("viewBox", );
 
@@ -29,7 +29,7 @@ let myCircles2;
 //TODO: append svg object to the body of the page to house bar chart 
 const svg3 = d3.select("#vis-holder")
                 .append("svg")
-                .attr("width", )
+                .attr("width", width - margin.left - margin.right)
                 .attr("height", height - margin.top - margin.bottom) //height the same as above so they are next to eachother 
                 .attr("viewBox", );
 
@@ -110,6 +110,7 @@ d3.csv("data/iris.csv").then((data) => {
                               .style("opacity", 0.5);
 
     //TODO: Define a brush (call it brush1)
+    
 
     //TODO: Add brush1 to svg1
     
