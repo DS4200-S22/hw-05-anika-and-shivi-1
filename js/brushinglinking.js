@@ -1,7 +1,7 @@
 // Set margins and dimensions
 const margin = { top: 50, right: 50, bottom: 50, left: 200 };
-const width = 900; //- margin.left - margin.right;
-const height = 650; //- margin.top - margin.bottom;
+const width = 900 - margin.left - margin.right;
+const height = 650 - margin.top - margin.bottom;
 
 // Append svg object to the body of the page to house Scatterplot1
 const svg1 = d3.select("#vis-holder")
@@ -19,7 +19,7 @@ const svg2 = d3.select("#vis-holder")
                 .append("svg")
                 .attr("width", width - margin.left - margin.right)
                 .attr("height", height - margin.top - margin.bottom) //height the same as above so they are next to eachother
-                .attr("viewBox", );
+                .attr("viewBox", [0, 0, width, height]);
 
 //TODO: Initialize brush for Scatterplot2 and points. We will need these to be global.
 let brush2;
@@ -30,10 +30,10 @@ const svg3 = d3.select("#vis-holder")
                 .append("svg")
                 .attr("width", width - margin.left - margin.right)
                 .attr("height", height - margin.top - margin.bottom) //height the same as above so they are next to eachother
-                .attr("viewBox", );
+                .attr("viewBox", [0, 0, width, height]);
 
 //TODO: Initialize bars. We will need these to be global.
-let bars
+let bars;
 
 // Define color scale
 const color = d3.scaleOrdinal()
@@ -109,89 +109,165 @@ d3.csv("data/iris.csv").then((data) => {
                               .style("opacity", 0.5);
 
     //TODO: Define a brush (call it brush1)
+    // initialize brush area
+    let brush1 = d3.brush().extent([ [0,0], [width,height] ]);
 
 
     //TODO: Add brush1 to svg1
-    svg
-    .call( d3.brush()                 // Add the brush feature using the d3.brush function
-      .extent( [ [0,0], [width,height] ] ) // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
-      .on("start brush", updateChart) // Each time the brush selection changes, trigger the 'updateChart' function
-    )
+    svg1
+    .call(brush1
+      .on("clear brush", clear)
+      .on("start brush", updateChart1)
+    );
   }
 
   //TODO: Scatterplot 2 (show Sepal width on x-axis and Petal width on y-axis)
   {
-    let xKey1 = "Sepal_Width";
-    let yKey1 = "Petal_Width";
+    let xKey2 = "Sepal_Width";
+    let yKey2 = "Petal_Width";
 
     // Find max x
-    let maxX1 = d3.max(data, (d) => { return d[xKey1]; });
+    let maxX2 = d3.max(data, (d) => { return d[xKey2]; });
 
     // Create X scale
-    let x1 = d3.scaleLinear()
-                .domain([0,maxX1])
+    let x2 = d3.scaleLinear()
+                .domain([0,maxX2])
                 .range([margin.left, width-margin.right]);
 
     // Add x axis
-    svg1.append("g")
+    svg2.append("g")
         .attr("transform", `translate(0,${height - margin.bottom})`)
-        .call(d3.axisBottom(x1))
+        .call(d3.axisBottom(x2))
         .attr("font-size", '20px')
         .call((g) => g.append("text")
                       .attr("x", width - margin.right)
                       .attr("y", margin.bottom - 4)
                       .attr("fill", "black")
                       .attr("text-anchor", "end")
-                      .text(xKey1)
+                      .text(xKey2)
       );
 
     // Finx max y
-    let maxY1 = d3.max(data, (d) => { return d[yKey1]; });
+    let maxY2 = d3.max(data, (d) => { return d[yKey2]; });
 
     // Create Y scale
-    let y1 = d3.scaleLinear()
-                .domain([0, maxY1])
+    let y2 = d3.scaleLinear()
+                .domain([0, maxY2])
                 .range([height - margin.bottom, margin.top]);
 
     // Add y axis
-    svg1.append("g")
+    svg2.append("g")
         .attr("transform", `translate(${margin.left}, 0)`)
-        .call(d3.axisLeft(y1))
+        .call(d3.axisLeft(y2))
         .attr("font-size", '20px')
         .call((g) => g.append("text")
                       .attr("x", 0)
                       .attr("y", margin.top)
                       .attr("fill", "black")
                       .attr("text-anchor", "end")
-                      .text(yKey1)
+                      .text(yKey2)
       );
 
     // Add points
-    const myCircles1 = svg1.selectAll("circle")
+    const myCircles2 = svg2.selectAll("circle")
                             .data(data)
                             .enter()
                               .append("circle")
                               .attr("id", (d) => d.id)
-                              .attr("cx", (d) => x1(d[xKey1]))
-                              .attr("cy", (d) => y1(d[yKey1]))
+                              .attr("cx", (d) => x2(d[xKey2]))
+                              .attr("cy", (d) => y2(d[yKey2]))
                               .attr("r", 8)
                               .style("fill", (d) => color(d.Species))
                               .style("opacity", 0.5);
 
-    //TODO: Define a brush (call it brush1)
+    //TODO: Define a brush (call it brush2)
+    // initialize brush area
+    let brush2 = d3.brush().extent([ [0,0], [width,height] ]);
 
-
-    //TODO: Add brush1 to svg1
-    svg1
-    .call( d3.brush()                 // Add the brush feature using the d3.brush function
-      .extent( [ [0,0], [width,height] ] ) // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
-      .on("start brush", updateChart1) // Each time the brush selection changes, trigger the 'updateChart' function
-    )
+    //TODO: Add brush2 to svg2
+    svg2
+    .call(brush2
+      .on("clear brush", clear // Each time the brush selection changes, trigger the 'updateChart' function
+      .on("start brush", updateChart2) // Each time the brush selection changes, trigger the 'updateChart' function
+    );
   }
 
   //TODO: Barchart with counts of different species
   {
-    // Bar chart code here
+    let xKey3 = "Species";
+    let yKey3 = "Count";
+
+    // Hardcoded barchart data
+    const data = [
+      {Species: 'setosa', Count: 50},
+      {Species: 'versicolor', Count: 50},
+      {Species: 'virginica', Count: 50},
+    ];
+
+    /*
+
+      Axes
+
+    */
+
+    // Create x scale
+    let x3 = d3.scaleBand()
+                .domain(d3.range(data.length))
+                .range([margin.left, width - margin.right])
+                .padding(0.1);
+
+    // Add x axis
+    svg3.append("g")
+        .attr("transform", `translate(0,${height - margin.bottom})`)
+        .call(d3.axisBottom(x3)
+        .tickFormat(i => data[i].Species))
+        .attr("font-size", '20px')
+        .call((g) => g.append("text")
+                      .attr("x", width - margin.right)
+                      .attr("y", margin.bottom - 4)
+                      .attr("fill", "black")
+                      .attr("text-anchor", "end")
+                      .text(xKey3)
+      );
+
+    // Find max y value to plot
+    let maxY3 = d3.max(data, function(d) { return d[yKey3]; });
+
+    // Create y scale
+    let y3 = d3.scaleLinear()
+                .domain([0,maxY3])
+                .range([height-margin.bottom,margin.top]);
+
+    // Add y axis
+    svg3.append("g")
+        .attr("transform", `translate(${margin.left}, 0)`)
+        .call(d3.axisLeft(y3))
+        .attr("font-size", '20px')
+        .call((g) => g.append("text")
+                      .attr("x", 0)
+                      .attr("y", margin.top)
+                      .attr("fill", "black")
+                      .attr("text-anchor", "end")
+                      .text(yKey3)
+        );
+    /*
+
+      Bars
+
+    */
+
+    // Add bars to the webpage, bind events needed for tooltips
+    bars.selectAll(".bar")
+       .data(data)
+       .enter()
+       .append("rect")
+         .attr("class", "bar")
+         .attr("x", (d,i) => x3(i))
+         .attr("y", (d) => y3(d.Count))
+         .attr("height", (d) => (height - margin.bottom) - y3(d.Count))
+         .attr("width", x3.bandwidth())
+         .style("fill", (d) => color(d.Species))
+         .style("opacity", 0.5);
   }
 
   //Brushing Code---------------------------------------------------------------------------------------------
