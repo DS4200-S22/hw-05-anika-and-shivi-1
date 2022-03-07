@@ -116,9 +116,8 @@ d3.csv("data/iris.csv").then((data) => {
     //TODO: Add brush1 to svg1
     svg1
     .call(brush1
-      .on("clear brush", clear)
-      .on("start brush", updateChart1)
-    );
+      .on("start", clear)
+      .on("brush", updateChart1));
   }
 
   //TODO: Scatterplot 2 (show Sepal width on x-axis and Petal width on y-axis)
@@ -187,9 +186,8 @@ d3.csv("data/iris.csv").then((data) => {
     //TODO: Add brush2 to svg2
     svg2
     .call(brush2
-      .on("clear brush", clear // Each time the brush selection changes, trigger the 'updateChart' function
-      .on("start brush", updateChart2) // Each time the brush selection changes, trigger the 'updateChart' function
-    );
+      .on("start", clear) // Each time the brush selection changes, trigger the 'updateChart' function
+      .on("brush", updateChart2)); // Each time the brush selection changes, trigger the 'updateChart' function
   }
 
   //TODO: Barchart with counts of different species
@@ -257,7 +255,7 @@ d3.csv("data/iris.csv").then((data) => {
     */
 
     // Add bars to the webpage, bind events needed for tooltips
-    bars.selectAll(".bar")
+    bars = svg3.selectAll(".bar")
        .data(data)
        .enter()
        .append("rect")
