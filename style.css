@@ -1,8 +1,11 @@
 
+/* set all font to arial */
 body {
   font-family: Arial;
 }
 
+
+/* black borders */
 .selected {
   stroke: black;
   stroke-width: 5px;
